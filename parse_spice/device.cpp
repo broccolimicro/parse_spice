@@ -1,8 +1,8 @@
 #include "device.h"
-#include "line_comment.h"
+#include "tokens/line_comment.h"
 
-#include <parse/default/symbol.h>
-#include <parse/default/number.h>
+#include "tokens/node.h"
+#include "tokens/number.h"
 #include <parse/default/white_space.h>
 #include <parse/default/new_line.h>
 
@@ -27,33 +27,28 @@ void device::parse(tokenizer &tokens, void *data) {
 	tokens.increment(true);
 	tokens.expect<parse::new_line>();
 
-	tokens.increment(false);
-	tokens.expect<parameter>();
-
 	tokens.increment(true);
-	tokens.expect<parse::symbol>();
-
-	tokens.increment(true);
-	tokens.expect<parse::symbol>();
+	tokens.expect<node>();
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
 		name = tokens.next();
 	}
 
-	while (tokens.decrement(__FILE__, __LINE__, data)) {
+	while (tokens.is_next<node>() and not parameter::is_next(tokens, 1, data)) {
 		ports.push_back(tokens.next());
-
-		tokens.increment(false);
-		tokens.expect<parse::symbol>();
 	}
 	type = ports.back();
 	ports.pop_back();
 
-	while (tokens.decrement(__FILE__, __LINE__, data)) {
-		params.push_back(parameter(tokens, data));
-
-		tokens.increment(false);
-		tokens.expect<parameter>();
+	while (true) {
+		if (parameter::is_next(tokens, 1, data)) {
+			params.push_back(parameter(tokens, data));
+		} else if (tokens.is_next<number>()) {
+			params.push_back(parameter());
+			params.back().value = tokens.next();
+		} else {
+			break;
+		}
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
@@ -73,8 +68,8 @@ void device::register_syntax(tokenizer &tokens) {
 	{
 		tokens.register_syntax<device>();
 		parameter::register_syntax(tokens);
-		tokens.register_token<parse::symbol>();
-		tokens.register_token<parse::number>();
+		tokens.register_token<node>();
+		tokens.register_token<number>();
 		tokens.register_token<parse::white_space>(false);
 		tokens.register_token<line_comment>(false);
 		tokens.register_token<parse::new_line>();

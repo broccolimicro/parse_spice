@@ -24,7 +24,7 @@ token line_comment::consume(tokenizer &tokens, void *data)
 
 	do {
 		character = tokens.next_char();
-	} while (character != '\0' && character != '\n');
+	} while (character != '\0' and character != '\n' and character != '\r');
 
 	result.end = tokens.offset;
 	return result;

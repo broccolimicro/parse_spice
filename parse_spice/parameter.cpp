@@ -6,11 +6,12 @@
  */
 
 #include "parameter.h"
-#include "parameter.h"
-#include <parse/default/symbol.h>
-#include <parse/default/number.h>
+#include "tokens/node.h"
+#include "tokens/number.h"
 #include <parse/default/white_space.h>
 #include <parse/default/new_line.h>
+
+#include "tokens/symbol.h"
 
 namespace parse_spice {
 
@@ -31,14 +32,14 @@ void parameter::parse(tokenizer &tokens, void *data) {
 	tokens.syntax_start(this);
 
 	tokens.increment(true);
-	tokens.expect<parse::symbol>();
+	tokens.expect<node>();
+	tokens.expect<number>();
 
 	tokens.increment(true);
 	tokens.expect("=");
 
 	tokens.increment(true);
-	tokens.expect<parse::symbol>();
-	tokens.expect<parse::number>();
+	tokens.expect<node>();
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
 		name = tokens.next();
@@ -63,8 +64,9 @@ void parameter::register_syntax(tokenizer &tokens) {
 	if (!tokens.syntax_registered<parameter>())
 	{
 		tokens.register_syntax<parameter>();
-		tokens.register_token<parse::symbol>();
-		tokens.register_token<parse::number>();
+		tokens.register_token<node>();
+		tokens.register_token<number>();
+		tokens.register_token<symbol>();
 		tokens.register_token<parse::white_space>(false);
 		tokens.register_token<parse::new_line>();
 	}

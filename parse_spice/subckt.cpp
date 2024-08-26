@@ -1,7 +1,8 @@
 #include "subckt.h"
-#include "line_comment.h"
-#include <parse/default/symbol.h>
-#include <parse/default/number.h>
+#include "tokens/line_comment.h"
+#include "tokens/command.h"
+#include "tokens/node.h"
+#include "tokens/number.h"
 #include <parse/default/white_space.h>
 #include <parse/default/new_line.h>
 
@@ -27,11 +28,11 @@ void subckt::parse(tokenizer &tokens, void *data) {
 	tokens.expect<parse::new_line>();
 
 	tokens.increment(false);
-	tokens.expect<parse::symbol>();
-	tokens.expect<parse::number>();
+	tokens.expect<node>();
+	tokens.expect<number>();
 
 	tokens.increment(true);
-	tokens.expect<parse::symbol>();
+	tokens.expect<node>();
 
 	tokens.increment(true);
 	tokens.expect(".subckt");
@@ -49,15 +50,15 @@ void subckt::parse(tokenizer &tokens, void *data) {
 		ports.push_back(tokens.next());
 
 		tokens.increment(false);
-		tokens.expect<parse::symbol>();
-		tokens.expect<parse::number>();
+		tokens.expect<node>();
+		tokens.expect<number>();
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
 		tokens.next();
 	}
 
-	tokens.increment(true);
+	tokens.increment(false);
 	tokens.expect<parse::new_line>();
 
 	tokens.increment(true);
@@ -94,9 +95,11 @@ void subckt::register_syntax(tokenizer &tokens) {
 	{
 		tokens.register_syntax<subckt>();
 		device::register_syntax(tokens);
-		tokens.register_token<parse::symbol>();
-		tokens.register_token<parse::number>();
+		tokens.register_token<node>();
+		tokens.register_token<number>();
 		tokens.register_token<parse::white_space>(false);
+		tokens.register_token<line_comment>(false);
+		tokens.register_token<command>();
 		tokens.register_token<parse::new_line>();
 	}
 }
