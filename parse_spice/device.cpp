@@ -31,11 +31,11 @@ void device::parse(tokenizer &tokens, void *data) {
 	tokens.expect<node>();
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
-		name = tokens.next();
+		name = lower(tokens.next());
 	}
 
 	while (tokens.is_next<node>() and not parameter::is_next(tokens, 1, data)) {
-		ports.push_back(tokens.next());
+		ports.push_back(lower(tokens.next()));
 	}
 	type = ports.back();
 	ports.pop_back();
@@ -45,7 +45,7 @@ void device::parse(tokenizer &tokens, void *data) {
 			params.push_back(parameter(tokens, data));
 		} else if (tokens.is_next<number>()) {
 			params.push_back(parameter());
-			params.back().value = tokens.next();
+			params.back().value = lower(tokens.next());
 		} else {
 			break;
 		}

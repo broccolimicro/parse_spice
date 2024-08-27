@@ -43,11 +43,11 @@ void subckt::parse(tokenizer &tokens, void *data) {
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
-		name = tokens.next();
+		name = lower(tokens.next());
 	}
 
 	while (tokens.decrement(__FILE__, __LINE__, data)) {
-		ports.push_back(tokens.next());
+		ports.push_back(lower(tokens.next()));
 
 		tokens.increment(false);
 		tokens.expect<node>();

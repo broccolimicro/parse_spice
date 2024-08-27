@@ -10,6 +10,7 @@
 #include "tokens/number.h"
 #include <parse/default/white_space.h>
 #include <parse/default/new_line.h>
+#include <common/text.h>
 
 #include "tokens/symbol.h"
 
@@ -42,7 +43,7 @@ void parameter::parse(tokenizer &tokens, void *data) {
 	tokens.expect<node>();
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
-		name = tokens.next();
+		name = lower(tokens.next());
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
@@ -50,7 +51,7 @@ void parameter::parse(tokenizer &tokens, void *data) {
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
-		value = tokens.next();
+		value = lower(tokens.next());
 	}
 	
 	tokens.syntax_end(this);

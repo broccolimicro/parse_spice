@@ -22,7 +22,7 @@ token node::consume(tokenizer &tokens, void *data)
 	{
 		tokens.next_char();
 		character = tokens.peek_char(1);
-	} while ((character >= 'A' && character <= 'Z') || character == '_' || character == '_' || (character >= 'a' && character <= 'z') || (character >= '0' && character <= '9'));
+	} while ((character >= 'A' && character <= 'Z') || character == '_' || character == '#' || (character >= 'a' && character <= 'z') || (character >= '0' && character <= '9'));
 	result.end = tokens.offset+1;
 	return result;
 }
