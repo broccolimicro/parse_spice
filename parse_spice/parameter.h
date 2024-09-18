@@ -9,6 +9,7 @@ namespace parse_spice
 struct parameter : parse::syntax
 {
 	parameter();
+	parameter(string name, string value);
 	parameter(tokenizer &tokens, void *data = NULL);
 	~parameter();
 

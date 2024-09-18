@@ -20,6 +20,12 @@ parameter::parameter() {
 	debug_name = "parameter";
 }
 
+parameter::parameter(string name, string value) {
+	debug_name = "parameter";
+	this->name = name;
+	this->value = value;
+}
+
 parameter::parameter(tokenizer &tokens, void *data) {
 	debug_name = "parameter";
 	parse(tokens, data);
