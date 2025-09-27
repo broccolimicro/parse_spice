@@ -9,11 +9,11 @@
 namespace parse_spice {
 
 netlist::netlist() {
-	debug_name = "netlist";
+	debug_name = "spice_netlist";
 }
 
 netlist::netlist(tokenizer &tokens, void *data) {
-	debug_name = "netlist";
+	debug_name = "spice_netlist";
 	parse(tokens, data);
 }
 

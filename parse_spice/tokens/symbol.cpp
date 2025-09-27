@@ -5,7 +5,7 @@ namespace parse_spice
 
 symbol::symbol()
 {
-	debug_name = "symbol";
+	debug_name = "spice_symbol";
 }
 
 symbol::~symbol()

@@ -9,11 +9,11 @@
 namespace parse_spice {
 
 device::device() {
-	debug_name = "device";
+	debug_name = "spice_device";
 }
 
 device::device(tokenizer &tokens, void *data) {
-	debug_name = "device";
+	debug_name = "spice_device";
 	parse(tokens, data);
 }
 

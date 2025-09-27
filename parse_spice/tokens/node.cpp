@@ -5,7 +5,7 @@ namespace parse_spice
 
 node::node()
 {
-	debug_name = "node";
+	debug_name = "spice_node";
 }
 
 node::~node()

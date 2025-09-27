@@ -4,7 +4,7 @@ namespace parse_spice {
 
 line_comment::line_comment()
 {
-	debug_name = "line_comment";
+	debug_name = "spice_line_comment";
 }
 
 line_comment::~line_comment()

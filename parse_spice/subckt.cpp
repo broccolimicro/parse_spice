@@ -9,11 +9,11 @@
 namespace parse_spice {
 
 subckt::subckt() {
-	debug_name = "subckt";
+	debug_name = "spice_subckt";
 }
 
 subckt::subckt(tokenizer &tokens, void *data) {
-	debug_name = "subckt";
+	debug_name = "spice_subckt";
 	parse(tokens, data);
 }
 

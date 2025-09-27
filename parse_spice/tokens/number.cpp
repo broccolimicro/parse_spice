@@ -5,7 +5,7 @@ namespace parse_spice
 
 number::number()
 {
-	debug_name = "number";
+	debug_name = "spice_number";
 }
 
 number::~number()

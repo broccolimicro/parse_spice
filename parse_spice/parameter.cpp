@@ -17,17 +17,17 @@
 namespace parse_spice {
 
 parameter::parameter() {
-	debug_name = "parameter";
+	debug_name = "spice_parameter";
 }
 
 parameter::parameter(string name, string value) {
-	debug_name = "parameter";
+	debug_name = "spice_parameter";
 	this->name = name;
 	this->value = value;
 }
 
 parameter::parameter(tokenizer &tokens, void *data) {
-	debug_name = "parameter";
+	debug_name = "spice_parameter";
 	parse(tokens, data);
 }
 

@@ -4,7 +4,7 @@ namespace parse_spice {
 
 command::command()
 {
-	debug_name = "command";
+	debug_name = "spice_command";
 }
 
 command::~command()
