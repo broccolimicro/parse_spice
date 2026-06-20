@@ -30,15 +30,24 @@ void device::parse(tokenizer &tokens, void *data) {
 	tokens.increment(true);
 	tokens.expect<node>();
 
+	tokens.increment(true);
+	tokens.expect<node>();
+
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
 		name = lower(tokens.next());
+	}
+
+	if (tokens.decrement(__FILE__, __LINE__, data)) {
+		ports.push_back(lower(tokens.next()));
 	}
 
 	while (tokens.is_next<node>() and not parameter::is_next(tokens, 1, data)) {
 		ports.push_back(lower(tokens.next()));
 	}
-	type = ports.back();
-	ports.pop_back();
+	if (not ports.empty()) {
+		type = ports.back();
+		ports.pop_back();
+	}
 
 	while (true) {
 		if (parameter::is_next(tokens, 1, data)) {
