@@ -57,7 +57,7 @@ void subckt::parse(tokenizer &tokens, void *data) {
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
 		if (tokens.found<parse_spice::line_comment>()) {
-			caption.push_back(tokens.next());
+			caption.push_back(string_from_comment(tokens.next()));
 		} else {
 			tokens.next();
 		}
@@ -89,7 +89,7 @@ void subckt::parse(tokenizer &tokens, void *data) {
 			}
 			tokens.next();
 		} else if (tokens.found<parse_spice::line_comment>()) {
-			comments.push_back(tokens.next());
+			comments.push_back(string_from_comment(tokens.next()));
 		}
 
 		tokens.increment(false);

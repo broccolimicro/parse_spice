@@ -17,6 +17,7 @@ struct line_comment
 };
 
 std::string comment_string(std::string s);
+std::string string_from_comment(std::string s);
 
 }
 

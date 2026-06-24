@@ -56,4 +56,12 @@ std::string comment_string(std::string s) {
 	return result;
 }
 
+std::string string_from_comment(std::string s) {
+	size_t pos = s.find_first_not_of(" \t\n\r\f\v*$");
+	s.erase(0, pos);
+	pos = s.find_last_not_of(" \t\n\r\f\v");
+	s.erase(pos == std::string::npos ? 0 : pos + 1);
+	return s;
+}
+
 }

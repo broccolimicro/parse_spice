@@ -47,7 +47,7 @@ void netlist::parse(tokenizer &tokens, void *data) {
 			}
 			tokens.next();
 		} else if (tokens.found<parse_spice::line_comment>()) {
-			comments.push_back(tokens.next());
+			comments.push_back(string_from_comment(tokens.next()));
 		}
 
 		tokens.increment(false);

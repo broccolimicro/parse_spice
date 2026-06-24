@@ -63,7 +63,7 @@ void device::parse(tokenizer &tokens, void *data) {
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
 		if (tokens.found<parse_spice::line_comment>()) {
-			atend = tokens.next();
+			atend = string_from_comment(tokens.next());
 		} else {
 			tokens.next();
 		}
