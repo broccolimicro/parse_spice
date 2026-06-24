@@ -137,10 +137,13 @@ string subckt::to_string(string tab) const {
 	for (int i = 0; i < (int)ports.size(); i++) {
 		result += " " + ports[i];
 	}
-
 	result += "\n";
-	for (std::string s : caption) {
-		result += comment_string(s) + "\n";
+
+	if (not caption.empty()) {
+		for (std::string s : caption) {
+			result += comment_string(s) + "\n";
+		}
+		result += "\n";
 	}
 
 	for (int i = 0; i < (int)devices.size(); i++) {
