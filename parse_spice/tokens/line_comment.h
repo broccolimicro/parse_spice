@@ -16,5 +16,7 @@ struct line_comment
 	static bool is_next(tokenizer &tokens, int i = 1, void *data = NULL);
 };
 
+std::string comment_string(std::string s);
+
 }
 

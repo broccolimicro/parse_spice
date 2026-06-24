@@ -32,7 +32,28 @@ token line_comment::consume(tokenizer &tokens, void *data)
 
 bool line_comment::is_next(tokenizer &tokens, int i, void *data)
 {
-	return tokens.peek_char(i) == '*';
+	return tokens.peek_char(i) == '*' or tokens.peek_char(i) == '$';
+}
+
+std::string comment_string(std::string s) {
+	auto pos = s.find_last_not_of(" \t\n\r\f\v");
+	s.erase(pos == std::string::npos ? 0 : pos + 1);
+
+	std::string result;
+	bool nl = true;
+	for (char c : s) {
+		if (c == '\n') {
+			nl = true;
+		} else if (nl and c != '\r') {
+			result += "* ";
+			nl = false;
+		} else if (nl and (c == '*' or c == '$')) {
+			nl = false;
+		}
+		result += c;
+	}
+
+	return result;
 }
 
 }

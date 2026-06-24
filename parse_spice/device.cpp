@@ -26,6 +26,7 @@ void device::parse(tokenizer &tokens, void *data) {
 
 	tokens.increment(true);
 	tokens.expect<parse::new_line>();
+	tokens.expect<parse_spice::line_comment>();
 
 	tokens.increment(true);
 	tokens.expect<node>();
@@ -61,7 +62,11 @@ void device::parse(tokenizer &tokens, void *data) {
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
-		tokens.next();
+		if (tokens.found<parse_spice::line_comment>()) {
+			atend = tokens.next();
+		} else {
+			tokens.next();
+		}
 	}
 
 	tokens.syntax_end(this);
@@ -80,14 +85,18 @@ void device::register_syntax(tokenizer &tokens) {
 		tokens.register_token<node>();
 		tokens.register_token<number>();
 		tokens.register_token<parse::white_space>(false);
-		tokens.register_token<line_comment>(false);
+		tokens.register_token<line_comment>();
 		tokens.register_token<parse::new_line>();
 	}
 }
 
 string device::to_string(string tab) const {
-	string result = name;
+	string result;
+	for (std::string s : header) {
+		result += comment_string(s) + "\n";
+	}
 
+	result += name;
 	for (int i = 0; i < (int)ports.size(); i++) {
 		result += " " + ports[i];
 	}
@@ -95,6 +104,10 @@ string device::to_string(string tab) const {
 
 	for (int i = 0; i < (int)params.size(); i++) {
 		result += " " + params[i].to_string(tab);
+	}
+
+	if (not atend.empty()) {
+		result += comment_string(atend);
 	}
 
 	result += "\n";

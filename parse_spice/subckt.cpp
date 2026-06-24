@@ -26,6 +26,7 @@ void subckt::parse(tokenizer &tokens, void *data) {
 
 	tokens.increment(true);
 	tokens.expect<parse::new_line>();
+	tokens.expect<parse_spice::line_comment>();
 
 	tokens.increment(false);
 	tokens.expect<node>();
@@ -55,7 +56,11 @@ void subckt::parse(tokenizer &tokens, void *data) {
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
-		tokens.next();
+		if (tokens.found<parse_spice::line_comment>()) {
+			caption.push_back(tokens.next());
+		} else {
+			tokens.next();
+		}
 	}
 
 	tokens.increment(false);
@@ -67,12 +72,30 @@ void subckt::parse(tokenizer &tokens, void *data) {
 
 	tokens.increment(false);
 	tokens.expect<parse_spice::device>();
+	tokens.expect<parse::new_line>();
+	tokens.expect<parse_spice::line_comment>();
+
+	vector<string> comments;
 
 	while (tokens.decrement(__FILE__, __LINE__, data)) {
-		devices.push_back(device(tokens, data));
+		if (tokens.found<parse_spice::device>()) {
+			devices.push_back(device(tokens, data));
+			devices.back().header = std::move(comments);
+			comments.clear();
+		} else if (tokens.found<parse::new_line>()) {
+			if (devices.empty()) {
+				caption.insert(header.end(), comments.begin(), comments.end());
+				comments.clear();
+			}
+			tokens.next();
+		} else if (tokens.found<parse_spice::line_comment>()) {
+			comments.push_back(tokens.next());
+		}
 
 		tokens.increment(false);
 		tokens.expect<parse_spice::device>();
+		tokens.expect<parse::new_line>();
+		tokens.expect<parse_spice::line_comment>();
 	}
 
 	if (tokens.decrement(__FILE__, __LINE__, data)) {
@@ -98,20 +121,28 @@ void subckt::register_syntax(tokenizer &tokens) {
 		tokens.register_token<node>();
 		tokens.register_token<number>();
 		tokens.register_token<parse::white_space>(false);
-		tokens.register_token<line_comment>(false);
+		tokens.register_token<line_comment>();
 		tokens.register_token<command>();
 		tokens.register_token<parse::new_line>();
 	}
 }
 
 string subckt::to_string(string tab) const {
-	string result = ".subckt " + name;
+	string result;
+	for (std::string s : header) {
+		result += comment_string(s) + "\n";
+	}
 
+	result += ".subckt " + name;
 	for (int i = 0; i < (int)ports.size(); i++) {
 		result += " " + ports[i];
 	}
 
 	result += "\n";
+	for (std::string s : caption) {
+		result += comment_string(s) + "\n";
+	}
+
 	for (int i = 0; i < (int)devices.size(); i++) {
 		result += devices[i].to_string(tab);
 	}

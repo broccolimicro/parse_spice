@@ -13,6 +13,9 @@ struct device : parse::syntax
 	device(tokenizer &tokens, void *data = NULL);
 	~device();
 
+	vector<string> header;
+	string atend;
+
 	string name;
 	vector<string> ports;
 	string type;

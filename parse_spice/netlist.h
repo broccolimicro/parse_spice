@@ -13,7 +13,9 @@ struct netlist : parse::syntax
 	netlist(tokenizer &tokens, void *data = NULL);
 	~netlist();
 
+	vector<string> header;
 	vector<subckt> subckts;
+	vector<string> footer;
 
 	void parse(tokenizer &tokens, void *data = NULL);
 	static bool is_next(tokenizer &tokens, int i = 1, void *data = NULL);
