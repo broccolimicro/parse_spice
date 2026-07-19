@@ -10,7 +10,7 @@ namespace parse_spice
 struct device : parse::syntax
 {
 	device();
-	device(tokenizer &tokens, void *data = NULL);
+	device(tokenizer &tokens, std::any data=std::any());
 	~device();
 
 	vector<string> header;
@@ -21,8 +21,8 @@ struct device : parse::syntax
 	string type;
 	vector<parameter> params;
 
-	void parse(tokenizer &tokens, void *data = NULL);
-	static bool is_next(tokenizer &tokens, int i = 1, void *data = NULL);
+	void parse(tokenizer &tokens, std::any data=std::any());
+	static bool is_next(tokenizer &tokens, int i = 1, std::any data=std::any());
 	static void register_syntax(tokenizer &tokens);
 
 	string to_string(string tab = "") const;

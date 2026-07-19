@@ -13,7 +13,7 @@ symbol::~symbol()
 
 }
 
-token symbol::consume(tokenizer &tokens, void *data)
+token symbol::consume(tokenizer &tokens, std::any data)
 {
 	token result;
 	result.type = tokens.token_type<symbol>();
@@ -25,7 +25,7 @@ token symbol::consume(tokenizer &tokens, void *data)
 	return result;
 }
 
-bool symbol::is_next(tokenizer &tokens, int i, void *data)
+bool symbol::is_next(tokenizer &tokens, int i, std::any data)
 {
 	char character = tokens.peek_char(i);
 

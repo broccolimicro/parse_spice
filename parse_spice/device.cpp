@@ -12,7 +12,7 @@ device::device() {
 	debug_name = "spice_device";
 }
 
-device::device(tokenizer &tokens, void *data) {
+device::device(tokenizer &tokens, std::any data) {
 	debug_name = "spice_device";
 	parse(tokens, data);
 }
@@ -21,7 +21,7 @@ device::~device() {
 
 }
 
-void device::parse(tokenizer &tokens, void *data) {
+void device::parse(tokenizer &tokens, std::any data) {
 	tokens.syntax_start(this);
 
 	tokens.increment(true);
@@ -34,11 +34,11 @@ void device::parse(tokenizer &tokens, void *data) {
 	tokens.increment(true);
 	tokens.expect<node>();
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		name = lower(tokens.next());
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		ports.push_back(lower(tokens.next()));
 	}
 
@@ -61,7 +61,7 @@ void device::parse(tokenizer &tokens, void *data) {
 		}
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		if (tokens.found<parse_spice::line_comment>()) {
 			atend = string_from_comment(tokens.next());
 		} else {
@@ -72,7 +72,7 @@ void device::parse(tokenizer &tokens, void *data) {
 	tokens.syntax_end(this);
 }
 
-bool device::is_next(tokenizer &tokens, int i, void *data) {
+bool device::is_next(tokenizer &tokens, int i, std::any data) {
 	string next = tokens.peek(i);
 	return (next.size() > 1 and string("rRcClLdDqQjJmMxXfFhHeEgGkKvViI").find(next[0]) != string::npos);
 }

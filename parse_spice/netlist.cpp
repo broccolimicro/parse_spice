@@ -12,7 +12,7 @@ netlist::netlist() {
 	debug_name = "spice_netlist";
 }
 
-netlist::netlist(tokenizer &tokens, void *data) {
+netlist::netlist(tokenizer &tokens, std::any data) {
 	debug_name = "spice_netlist";
 	parse(tokens, data);
 }
@@ -21,7 +21,7 @@ netlist::~netlist() {
 
 }
 
-void netlist::parse(tokenizer &tokens, void *data) {
+void netlist::parse(tokenizer &tokens, std::any data) {
 	tokens.syntax_start(this);
 
 	tokens.increment(false);
@@ -35,7 +35,7 @@ void netlist::parse(tokenizer &tokens, void *data) {
 
 	vector<string> comments;
 
-	while (tokens.decrement(__FILE__, __LINE__, data)) {
+	while (tokens.decrement(__FILE__, __LINE__)) {
 		if (tokens.found<subckt>()) {
 			subckts.push_back(subckt(tokens, data));
 			subckts.back().header = std::move(comments);
@@ -59,14 +59,14 @@ void netlist::parse(tokenizer &tokens, void *data) {
 	footer = std::move(comments);
 	comments.clear();
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		tokens.next();
 	}
 
 	tokens.syntax_end(this);
 }
 
-bool netlist::is_next(tokenizer &tokens, int i, void *data) {
+bool netlist::is_next(tokenizer &tokens, int i, std::any data) {
 	return true;
 }
 

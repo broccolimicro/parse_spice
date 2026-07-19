@@ -12,7 +12,7 @@ node::~node()
 {
 }
 
-token node::consume(tokenizer &tokens, void *data)
+token node::consume(tokenizer &tokens, std::any data)
 {
 	token result;
 	result.type = tokens.token_type<node>();
@@ -27,7 +27,7 @@ token node::consume(tokenizer &tokens, void *data)
 	return result;
 }
 
-bool node::is_next(tokenizer &tokens, int i, void *data)
+bool node::is_next(tokenizer &tokens, int i, std::any data)
 {
 	char character = tokens.peek_char(i);
 

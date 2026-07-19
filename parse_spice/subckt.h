@@ -10,7 +10,7 @@ namespace parse_spice
 struct subckt : parse::syntax
 {
 	subckt();
-	subckt(tokenizer &tokens, void *data = NULL);
+	subckt(tokenizer &tokens, std::any data=std::any());
 	~subckt();
 
 	vector<string> header;
@@ -19,8 +19,8 @@ struct subckt : parse::syntax
 	vector<device> devices;
 	vector<string> caption;
 
-	void parse(tokenizer &tokens, void *data = NULL);
-	static bool is_next(tokenizer &tokens, int i = 1, void *data = NULL);
+	void parse(tokenizer &tokens, std::any data=std::any());
+	static bool is_next(tokenizer &tokens, int i = 1, std::any data=std::any());
 	static void register_syntax(tokenizer &tokens);
 
 	string to_string(string tab = "") const;

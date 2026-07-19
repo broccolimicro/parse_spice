@@ -12,7 +12,7 @@ subckt::subckt() {
 	debug_name = "spice_subckt";
 }
 
-subckt::subckt(tokenizer &tokens, void *data) {
+subckt::subckt(tokenizer &tokens, std::any data) {
 	debug_name = "spice_subckt";
 	parse(tokens, data);
 }
@@ -21,7 +21,7 @@ subckt::~subckt() {
 
 }
 
-void subckt::parse(tokenizer &tokens, void *data) {
+void subckt::parse(tokenizer &tokens, std::any data) {
 	tokens.syntax_start(this);
 
 	tokens.increment(true);
@@ -39,15 +39,15 @@ void subckt::parse(tokenizer &tokens, void *data) {
 	tokens.expect(".subckt");
 	tokens.expect(".SUBCKT");
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		tokens.next();
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		name = lower(tokens.next());
 	}
 
-	while (tokens.decrement(__FILE__, __LINE__, data)) {
+	while (tokens.decrement(__FILE__, __LINE__)) {
 		ports.push_back(lower(tokens.next()));
 
 		tokens.increment(false);
@@ -55,7 +55,7 @@ void subckt::parse(tokenizer &tokens, void *data) {
 		tokens.expect<number>();
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		if (tokens.found<parse_spice::line_comment>()) {
 			caption.push_back(string_from_comment(tokens.next()));
 		} else {
@@ -77,7 +77,7 @@ void subckt::parse(tokenizer &tokens, void *data) {
 
 	vector<string> comments;
 
-	while (tokens.decrement(__FILE__, __LINE__, data)) {
+	while (tokens.decrement(__FILE__, __LINE__)) {
 		if (tokens.found<parse_spice::device>()) {
 			devices.push_back(device(tokens, data));
 			devices.back().header = std::move(comments);
@@ -98,18 +98,18 @@ void subckt::parse(tokenizer &tokens, void *data) {
 		tokens.expect<parse_spice::line_comment>();
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		tokens.next();
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		tokens.next();
 	}
 
 	tokens.syntax_end(this);
 }
 
-bool subckt::is_next(tokenizer &tokens, int i, void *data) {
+bool subckt::is_next(tokenizer &tokens, int i, std::any data) {
 	return tokens.is_next(".subckt", i) || tokens.is_next(".SUBCKT", i);
 }
 

@@ -26,7 +26,7 @@ parameter::parameter(string name, string value) {
 	this->value = value;
 }
 
-parameter::parameter(tokenizer &tokens, void *data) {
+parameter::parameter(tokenizer &tokens, std::any data) {
 	debug_name = "spice_parameter";
 	parse(tokens, data);
 }
@@ -35,7 +35,7 @@ parameter::~parameter() {
 
 }
 
-void parameter::parse(tokenizer &tokens, void *data) {
+void parameter::parse(tokenizer &tokens, std::any data) {
 	tokens.syntax_start(this);
 
 	tokens.increment(true);
@@ -48,22 +48,22 @@ void parameter::parse(tokenizer &tokens, void *data) {
 	tokens.increment(true);
 	tokens.expect<node>();
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		name = lower(tokens.next());
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		tokens.next();
 	}
 
-	if (tokens.decrement(__FILE__, __LINE__, data)) {
+	if (tokens.decrement(__FILE__, __LINE__)) {
 		value = lower(tokens.next());
 	}
 	
 	tokens.syntax_end(this);
 }
 
-bool parameter::is_next(tokenizer &tokens, int i, void *data) {
+bool parameter::is_next(tokenizer &tokens, int i, std::any data) {
 	return tokens.is_next("=", i+1);
 }
 

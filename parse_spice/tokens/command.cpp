@@ -12,7 +12,7 @@ command::~command()
 
 }
 
-token command::consume(tokenizer &tokens, void *data)
+token command::consume(tokenizer &tokens, std::any data)
 {
 	token result;
 	result.type = tokens.token_type<command>();
@@ -30,7 +30,7 @@ token command::consume(tokenizer &tokens, void *data)
 	return result;
 }
 
-bool command::is_next(tokenizer &tokens, int i, void *data)
+bool command::is_next(tokenizer &tokens, int i, std::any data)
 {
 	return tokens.peek_char(i) == '.';
 }
